@@ -28,7 +28,7 @@ class UserController extends Controller
     }
 
     public function getUser(){
-        return User::all();
+        return User::orderBy('id', 'DESC')->get();
     }
 
     public function deleteUser($id){
