@@ -2058,16 +2058,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           _this2.status = false;
         } else {
           if (res.status === 201) {
-            console.log('res');
-            console.log(res);
             _this2.errors = [];
             _this2.status = true;
 
-            _this2.errors.push(res.message);
+            _this2.errors.push(res.data.message);
 
             _this2.user = _objectSpread({}, res.data);
 
             _this2.users.unshift(res.data.data);
+
+            _this2.body.first_name = _this2.body.email = _this2.body.surname = '';
           }
         }
       })["catch"](function (err) {
@@ -2075,9 +2075,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     deleteUser: function deleteUser(id, index) {
+      var _this3 = this;
+
+      var user = this.users[index];
       this.users.splice(index, 1);
       axios.get("/api/user/".concat(id)).then(function (res) {
         console.log(res);
+        console.log(user);
+
+        if (res.status === 200) {
+          _this3.errors = [];
+          _this3.status = 'success';
+
+          _this3.errors.push("".concat(user.first_name, " has been deleted successfully"));
+        }
       })["catch"](function (err) {
         console.log(err);
       });

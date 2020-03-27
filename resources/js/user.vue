@@ -128,13 +128,12 @@
                              this.status = false;
                         } else {
                             if (res.status === 201) {
-                                console.log('res');
-                                console.log(res);
                                 this.errors = [];
                                 this.status = true;
-                                this.errors.push(res.message);
+                                this.errors.push(res.data.message);
                                 this.user = {...res.data};
                                 this.users.unshift(res.data.data);
+                                this.body.first_name = this.body.email = this.body.surname = '';
                             }
                         }
                     })
@@ -143,10 +142,18 @@
                     })
             },
             deleteUser(id, index) {
+                let user = this.users[index];
                 this.users.splice(index, 1);
                 axios.get(`/api/user/${id}`)
                     .then((res) => {
                         console.log(res);
+                        console.log(user);
+                        if (res.status === 200) {
+                            this.errors = [];
+                            this.status = 'success';
+                            this.errors.push(`${user.first_name} has been deleted successfully`)
+                        }
+
                     })
                     .catch((err) => {
                         console.log(err);

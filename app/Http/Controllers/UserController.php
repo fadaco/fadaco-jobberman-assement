@@ -14,16 +14,17 @@ class UserController extends Controller
         $validateData = Validator::make($request->all(), [
             'email' => 'required|email|string|unique:users',
             'first_name' => 'required|string',
-            'surname' => 'string',
+            'surname' => 'nullable|string',
         ]);
 
         if ($validateData->fails()) {
             return $validateData->messages()->all();
         }
 
+        $user = User::create($request->all());
 
-       if(User::create($request->all())) {
-           return $this->responseDisplay(201,'user created', $request->all());
+       if($user) {
+           return $this->responseDisplay(201,'user created', $user);
        }
     }
 
